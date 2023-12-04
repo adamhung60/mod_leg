@@ -15,9 +15,10 @@ async def main():
     c = moteus.Controller(query_resolution=qr)
     await c.set_stop()
 
+    motor = input('which motor? ')
     file_num = input('input trial number: ')
-    filename = 'leg_drop_moteus_disconnected_trial_'+file_num+ '.csv'
-    folder_path = '/Users/adamhung/Desktop/embir/mod_leg/mod_leg/Experiments/Exp2.1'
+    filename = 'drop_without_moteus_' + motor + '_trial_'+file_num+ '.csv'
+    folder_path = '/Users/adamhung/Desktop/embir/mod_leg/mod_leg/Experiments/Exp2.2'
     full_path = os.path.join(folder_path, filename)
 
     # open io stream for writing to csv file

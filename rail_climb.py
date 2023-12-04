@@ -15,8 +15,10 @@ async def main():
     c = moteus.Controller(query_resolution=qr)
     await c.set_stop()
 
+    motor = input('which motor? ')
+    pd_config = input('which pd config? ')
     file_num = input('input trial number: ')
-    filename = 'rail_climb_trial_'+file_num+ '.csv'
+    filename = 'rail_climb_'+motor+'_'+pd_config+ '_trial_'+file_num+ '.csv'
     folder_path = '/Users/adamhung/Desktop/embir/mod_leg/mod_leg/Experiments/Exp3'
     full_path = os.path.join(folder_path, filename)
  

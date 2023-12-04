@@ -16,8 +16,8 @@ async def main():
     await c.set_stop()
 
     file_num = input('input trial number: ')
-    filename = 'leg_drop_moteus_connected_trial_'+file_num+ '.csv'
-    folder_path = '/Users/adamhung/Desktop/embir/mod_leg/mod_leg/Experiments/Exp2.2'
+    filename = 'drop_with_moteus_trial_'+file_num+ '.csv'
+    folder_path = '/Users/adamhung/Desktop/embir/mod_leg/mod_leg/Experiments/Exp2.1'
     full_path = os.path.join(folder_path, filename)
 
     # open io stream for writing to csv file
