@@ -11,28 +11,38 @@ import matplotlib.pyplot as plt
 async def main():
 
     rise_times = []
+    angle = 1.5
 
-    for i in range(5):
+    for q in range(5):
 
-        print('trial ', i)
-        c = moteus.Controller()
+        print('trial ', q)
+        qr = moteus.QueryResolution()
+        qr._extra =  {
+            moteus.Register.MILLISECOND_COUNTER: moteus.F32,
+            moteus.Register.Q_CURRENT: moteus.F32,
+            moteus.Register.D_CURRENT: moteus.F32
+        }
+        c = moteus.Controller(query_resolution=qr)
         await c.set_stop()
         state = await c.set_position(position=math.nan, query=True)
-        angle = 1.5
         start = state.values[moteus.Register.POSITION]         
         end = start + angle    
-        print('start: ', start, ', end: ', end)
         current_pos = start
         times = []
         poses = []
+        currents = []
         prog_start = time.perf_counter()
-        while current_pos < end:
+        #while current_pos < end:
+        while (time.perf_counter() - prog_start) < 1:
+            print(time.perf_counter() - prog_start)
             state = await c.set_position(position=end, query=True)
             t_plot = time.perf_counter() - prog_start
             # read data from actuator register
             current_pos = state.values[moteus.Register.POSITION]
+            i_q = state.values[moteus.Register.Q_CURRENT]
             times.append(t_plot)
             poses.append(current_pos)
+            currents.append(i_q)
 
         # kill power to motor
         await c.set_stop()
@@ -42,22 +52,27 @@ async def main():
 
         # Find indices corresponding to the desired position range
         middle_eighty_indices = [i for i, pos in enumerate(poses) if ten_p <= pos <= ninety_p]
-        """plt.plot(times, poses, marker='o', linestyle='-',linewidth=1)
+        plt.plot(times, poses, marker='o', linestyle='-',linewidth=1)
         plt.plot([times[i] for i in middle_eighty_indices], [poses[i] for i in middle_eighty_indices], marker='o', linestyle='-', color='red',linewidth=2)
         plt.xlabel('Time')
         plt.ylabel('Position')
         plt.title('Position vs Time')
-        plt.show()"""
+        plt.show()
+
+        plt.plot(times, currents, marker='o', linestyle='-',linewidth=1)
+        plt.xlabel('Time')
+        plt.ylabel('current')
+        plt.title('current vs Time')
+        plt.show()
 
         rise_time = times[middle_eighty_indices[-1]] - times[middle_eighty_indices[0]]
         rise_times.append(rise_time)
         await asyncio.sleep(1)
 
-    print(rise_times)
-    print(np.mean(rise_times))
+    print('rise times: ' , rise_times)
+    print('mean rise time: ' , np.mean(rise_times))
     
     """plt.hist(rise_times, bins=10, edgecolor='black')
-
     plt.xlabel('Rise Times')
     plt.ylabel('Frequency')
     plt.title('Histogram of Rise Times')
