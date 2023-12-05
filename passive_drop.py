@@ -9,7 +9,6 @@ async def main():
     qr._extra =  {
         moteus.Register.MILLISECOND_COUNTER: moteus.F32,
         moteus.Register.Q_CURRENT: moteus.F32,
-        moteus.Register.D_CURRENT: moteus.F32
     }
     c = moteus.Controller(query_resolution=qr)
     await c.set_stop()
@@ -30,7 +29,6 @@ async def main():
         pos = state.values[moteus.Register.POSITION]
         v = state.values[moteus.Register.VELOCITY]
         i_q = state.values[moteus.Register.Q_CURRENT]
-        i_d = state.values[moteus.Register.D_CURRENT]
 
         writer.writerow({'time': t, 'position': pos, 'velocity': v, 'q_current': i_q, 'd_current': i_d})
                 

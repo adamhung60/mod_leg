@@ -13,11 +13,13 @@ async def main():
     rise_times_arr = []
     rise_times = []
     angle = 1.5 
-    kp_scales = [0.1, 0.5, 0.75, 2.0, 5.0, 10.0, 15.0]
+    kp_scales = [0.2, 5*0.5, 0.75, 1.0, 2.0, 5.0, 10.0]
+    kp_scales = [.3, .5, .3]
 
     
 
     for kp_sc in kp_scales:
+        print(kp_sc)
 
         for i in range(5):
 
@@ -35,7 +37,6 @@ async def main():
 
             prog_start = time.perf_counter()
             while current_pos < end - 0.1:
-                print(kp_sc)
                 state = await c.set_position(position=end, query=True, kp_scale = kp_sc, kd_scale = 1)
                 t_plot = time.perf_counter() - prog_start
                 # read data from actuator register

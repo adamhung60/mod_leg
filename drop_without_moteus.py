@@ -7,12 +7,7 @@ import csv
 import os
 
 async def main():
-    qr = moteus.QueryResolution()
-    qr._extra =  {
-        moteus.Register.MILLISECOND_COUNTER: moteus.F32,
-        moteus.Register.Q_CURRENT: moteus.F32,
-    }
-    c = moteus.Controller(query_resolution=qr)
+    c = moteus.Controller()
     await c.set_stop()
 
     motor = input('which motor? ')
@@ -52,7 +47,6 @@ async def main():
             # read position data from actuator register
             pos = state.values[moteus.Register.POSITION]
             v = state.values[moteus.Register.VELOCITY]
-            i_q = state.values[moteus.Register.Q_CURRENT]
             # write to csv
             writer.writerow({'time': t_plot, 'position': pos, 'velocity': v, 'q_current': i_q})
             # short time delay
