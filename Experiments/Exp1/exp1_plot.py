@@ -1,9 +1,21 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
 
-df = pd.read_csv('active_oscillation_trial_0.csv')
+df = pd.read_csv('active_oscillation_1_trial_0.csv')
 
-# Plotting
+
+# plot line
+angle = 0.5
+start = df['command_position'][0]        
+end = start + 2*angle   
+
+x_values = np.linspace(0, 10, 100)
+y_values = start + 0.7*(end - start) * np.ones_like(x_values)
+
+plt.plot(x_values, y_values, label='Cutoff Frequency')
+
+# Plotting data
 plt.plot(df['time'], df['command_position'], label='Command Position')
 plt.plot(df['time'], df['position'], label='Position')
 plt.xlabel('Time')
