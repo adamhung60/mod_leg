@@ -2,26 +2,26 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-df = pd.read_csv('active_oscillation_1_trial_0.csv')
+df = pd.read_csv('active_oscillation_1_trial_1.csv')
 
 
-# plot line
+# plot cutoff
 angle = 0.5
 start = df['command_position'][0]        
 end = start + 2*angle   
-
-x_values = np.linspace(0, 10, 100)
-y_values = start + 0.7*(end - start) * np.ones_like(x_values)
-
-plt.plot(x_values, y_values, label='Cutoff Frequency')
+x_values = np.linspace(0, 22, 100)
+y_values = (start + 1.7/2*(end - start)) * np.ones_like(x_values)
+y_values_2 = (start + 1.3/2*(end - start)) * np.ones_like(x_values)
+plt.plot(x_values, y_values, label='Cutoff Frequency', color='red')
+plt.plot(x_values, y_values_2, label='30 percent amplitude', color='black')
 
 # Plotting data
-plt.plot(df['time'], df['command_position'], label='Command Position')
-plt.plot(df['time'], df['position'], label='Position')
+plt.plot(df['time'], df['command_position'], label='Command Position', color='blue')
+plt.plot(df['time'], df['position'], label='Position', color='green')
 plt.xlabel('Time')
 plt.ylabel('Position')
 plt.legend()
-plt.title('Position and Command Position Over Time')
+plt.title('Position and Command Position Over Time (R150)')
 plt.show()
 
 
