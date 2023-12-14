@@ -22,16 +22,20 @@ async def main():
     state = await c.set_position(position=math.nan, query=True)
 
     #variables for movement
-    angle = 0.8
-    start = 0.5 + state.values[moteus.Register.POSITION]        
+    angle = 1.5
+    start = 0.3 + state.values[moteus.Register.POSITION]        
     end = start + angle
     poses = [start, end]
     num_steps  = 3
     eps = 0.2
+    # just initializing as global
+    pos = 0
 
     start_timer = time.perf_counter()
     while (time.perf_counter() - start_timer < 1):
-        state = await c.set_position(position=start, query=True, velocity_limit = 15)
+        # add eps to the position here so that the first step goes (start+eps to end-eps), just like all the other steps
+        state = await c.set_position(position=start+eps, query=True, velocity_limit = 15)
+        pos = state.values[moteus.Register.POSITION]
         print("going to start pos")
     
     
@@ -42,15 +46,11 @@ async def main():
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
         prog_start = time.perf_counter()
-        print("entering loop")
 
         for i in range(num_steps):
-            print("hi")
             for pose in poses:
-                print("hi2")
                 # sends position command and logs data until within eps of target position
-                while abs(state.values[moteus.Register.POSITION] - pose) > eps:
-                    print("hi3")
+                while abs(pos - pose) > eps:
                     state = await c.set_position(position=pose, query=True)
 
                     t = time.perf_counter() - prog_start
